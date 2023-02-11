@@ -19,9 +19,8 @@ var showSavedPostersButton = document.querySelector('.show-saved');
 var randomButton = document.querySelector('.show-random');
 var nevermindButton = document.querySelector('.show-main');
 var makeMyPosterButton = document.querySelector('.make-poster');
-
-
-
+var savePosterButton = document.querySelector('.save-poster');
+var savedPosterArticle = document.querySelector('.saved-posters-grid');
 
 
 // we've provided you with some data to work with 👇
@@ -127,15 +126,14 @@ var currentPoster;
 
 // event listeners go here 👇
 window.onload = createNewPoster()
-randomButton.addEventListener('click', createNewPoster)
-makeYourOwnButton.addEventListener('click', makeYourOwnPoster)
-showSavedPostersButton.addEventListener('click', viewSavedPosters)
-nevermindButton.addEventListener('click', goBackToMain)
-backToMainButton.addEventListener('click', goBackToMain)
-
-
 randomButton.addEventListener('click', createNewPoster);
-makeMyPosterButton.addEventListener('click', makeMyPoster)
+makeYourOwnButton.addEventListener('click', makeYourOwnPoster);
+showSavedPostersButton.addEventListener('click', viewSavedPosters);
+nevermindButton.addEventListener('click', goBackToMain);
+backToMainButton.addEventListener('click', goBackToMain);
+randomButton.addEventListener('click', createNewPoster);
+makeMyPosterButton.addEventListener('click', makeMyPoster);
+savePosterButton.addEventListener('click', saveMyPoster);
 
 // functions and event handlers go here 👇
 // (we've provided one for you to get you started)!
@@ -146,54 +144,76 @@ function getRandomIndex(array) {
 
 // ******* Iteration 0 *****************
 function getRandomTitle() {
-  return titles[getRandomIndex(titles)]
+  return titles[getRandomIndex(titles)];
 }
 
 function getRandomQuote() {
-  return quotes[getRandomIndex(quotes)]
+  return quotes[getRandomIndex(quotes)];
 }
 
 function getRandomImage() {
-  return images[getRandomIndex(images)]
+  return images[getRandomIndex(images)];
 }
 
 function createNewPoster() {
   var poster1 = new Poster(getRandomImage(), getRandomTitle(), getRandomQuote());
+  currentPoster = poster1
 
-  posterTitle.innerText = poster1.title
-  posterQuote.innerText = poster1.quote
-  posterImage.src = poster1.imageURL
+  posterTitle.innerText = poster1.title;
+  posterQuote.innerText = poster1.quote;
+  posterImage.src = poster1.imageURL;
 }
 // *********** Iteration 1 ***************
 
 function makeYourOwnPoster() {
-  form.classList.remove("hidden")
-  mainPoster.classList.add("hidden")
+  form.classList.remove("hidden");
+  mainPoster.classList.add("hidden");
 }
 
 function goBackToMain() {
-  form.classList.add("hidden")
-  mainPoster.classList.remove("hidden")
+  form.classList.add("hidden");
+  mainPoster.classList.remove("hidden");
+  savedPostersPage.classList.add("hidden");
+  savedPosterArticle.innerHTML = ``
 }
 
 function viewSavedPosters() {
-  mainPoster.classList.add("hidden")
-  savedPostersPage.classList.remove("hidden")
+  mainPoster.classList.add("hidden");
+  savedPostersPage.classList.remove("hidden");
+  for (var i = 0; i < savedPosters.length; i++) {
+    savedPosterArticle.innerHTML += `
+      <article class="mini-poster"> 
+        <img  src="${savedPosters[i].imageURL}" alt="nothin' to see here">
+        <h2>${savedPosters[i].title}</h2>
+        <h4>${savedPosters[i].quote}</h4>
+      </article>
+    `
+  }
 }
 // *********** Iteration 2 *****************
 
 function makeMyPoster(event) {
   event.preventDefault()
   var userPoster = new Poster(urlInput.value, titleInput.value, quoteInput.value);
+  currentPoster = userPoster
 
-  posterTitle.innerText = userPoster.title
-  posterQuote.innerText = userPoster.quote
-  posterImage.src = userPoster.imageURL
+  posterTitle.innerText = userPoster.title;
+  posterQuote.innerText = userPoster.quote;
+  posterImage.src = userPoster.imageURL;
 
   images.push(urlInput.value);
   titles.push(titleInput.value);
   quotes.push(quoteInput.value);
   
-  goBackToMain()
-
+  goBackToMain();
 }
+// ************ Iteration 3 ****************
+
+function saveMyPoster() {
+  if (!savedPosters.includes(currentPoster)) {
+    savedPosters.push(currentPoster)
+  }
+}
+
+
+
