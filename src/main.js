@@ -137,20 +137,8 @@ function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
 }
 
-function getRandomTitle() {
-  return titles[getRandomIndex(titles)];
-}
-
-function getRandomQuote() {
-  return quotes[getRandomIndex(quotes)];
-}
-
-function getRandomImage() {
-  return images[getRandomIndex(images)];
-}
-
 function createNewPoster() {
-  var poster1 = new Poster(getRandomImage(), getRandomTitle(), getRandomQuote());
+  var poster1 = new Poster(images[getRandomIndex(images)], titles[getRandomIndex(titles)], quotes[getRandomIndex(quotes)]);
   
   currentPoster = poster1
   posterTitle.innerText = poster1.title;
@@ -158,21 +146,29 @@ function createNewPoster() {
   posterImage.src = poster1.imageURL;
 }
 
+function hide(area) {
+  area.classList.add('hidden');
+}
+
+function show(element) {
+  element.classList.remove('hidden');
+}
+
 function makeYourOwnPoster() {
-  form.classList.remove("hidden");
-  mainPoster.classList.add("hidden");
+  show(form);
+  hide(mainPoster);
 }
 
 function goBackToMain() {
-  form.classList.add("hidden");
-  mainPoster.classList.remove("hidden");
-  savedPostersPage.classList.add("hidden");
+  hide(form);
+  show(mainPoster);
+  hide(savedPostersPage);
   savedPosterArticle.innerHTML = ``
 }
 
 function viewSavedPosters() {
-  mainPoster.classList.add("hidden");
-  savedPostersPage.classList.remove("hidden");
+  hide(mainPoster);
+  show(savedPostersPage);
   
   for (var i = 0; i < savedPosters.length; i++) {
     savedPosterArticle.innerHTML += `
